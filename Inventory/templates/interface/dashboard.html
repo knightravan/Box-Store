@@ -1,0 +1,73 @@
+{% extends 'interface/base.html' %}
+{% load static %}
+
+{% block msg %}
+	{% if messages %}
+		{% for msg in messages %}
+			<p {% if msg.tags %} class="alert alert-{{msg.tags}} mb-7" {% endif %}>{{msg}}</p>
+		{% endfor %}
+	{% endif %}
+	
+{% endblock msg%}
+
+
+{% block content %}
+	<div class="col-sm-10">
+		
+		<h3 class="text-white my-5"> Dashboard Page</h3>
+		{% if request.user.is_staff %}
+		<h3><a href="{% url 'addpost' %}" class="btn btn-success">Add Post</a></h3>
+		{% endif %}
+		<h4 class="text-center alert alert-info mt-3">Show Post Information</h4>
+		{% if posts %}
+			<table class="table table-hover bg-dak">
+				<thead>
+					<tr class="text-center">
+						<th scope="col" style="width: 12%;">Length</th>
+						<th scope="col" style="width: 12%;">Breath</th>
+						<th scope="col" style="width: 12%;">Height</th>
+						<th scope="col" style="width: 12%;">Area</th>
+						<th scope="col" style="width: 12%;">Volumn</th>
+						{% if request.user.is_staff %}
+							<th scope="col" style="width: 12%;">Created By</th>
+							<th scope="col" style="width: 12%;">Last Update</th>
+							<th scope="col" style="width: 16%;">Action</th>
+						{% else %}
+							<br>
+						{% endif %}
+					</tr>
+				</thead>
+				<tbody>
+					{% for ps in posts %}
+						<tr class="text-center">
+							<td>{{ps.length}}</td>
+							<td>{{ps.breadth}}</td>
+							<td>{{ps.height}}</td>
+							<td>{{ps.area}}</td>
+							<td>{{ps.volume}}</td>
+							{% if request.user.is_staff %}
+								<td>{{ps.creator}}</td>
+								<td>{{ps.last_update}}</td>
+								<td class="text-center">
+									<a href="{% url 'updatepost' ps.id %}" class="btn btn-warning btn-sm">Update</a>
+									<form action="{% url 'deletepost' ps.id %}" method="POST" class="d-inline">
+										{% csrf_token %}
+										<input type="submit" class="btn btn-danger btn-sm" value="Delete">
+									</form> 
+								</td>
+							{% else %}
+								<br>
+							{% endif %}
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		{% else %}
+			<h4 class="text-center alert alert-warning">NO Records</h4>
+
+		{% endif %}
+
+		
+	</div>
+
+{% endblock content %}

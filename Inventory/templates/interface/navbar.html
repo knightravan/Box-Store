@@ -1,0 +1,37 @@
+<style>
+	nav{
+		margin: 0px;
+		padding: 5px;
+		display: flex;
+	}
+	nav li{
+		float: left;
+		list-style-type: None;
+	}
+	.nav-link{
+		color: antiquewhite;
+		text-align: top;
+		padding: 0px 20px;
+		margin-top: 5px;
+	}
+	nav li.right{
+		float: right;
+	}
+</style>
+<nav>
+			<a href="/" class="navbar-brand" style="color: silver;">Store</a>
+			<ul>
+				<li class="nav-link">{{user}}</li>
+				<li><a href="/" class="nav-link">Home</a></li>
+
+				{% if request.user.is_authenticated %}
+					{% if request.user.is_staff %}
+						<li><a href="{% url 'dashboard' %}" class="nav-link okey">Dashboard</a></li>
+					{% endif %}
+					<li><a href="{% url 'logout' %}" class="right btn btn-danger " style="">Logout</a></li>
+				{% else %}
+					<li><a href="{% url 'login' %}" class="nav-link">Login</a></li>
+					<li><a href="{% url 'signup' %}" class="nav-link ">Signup</a></li>
+				{% endif %}
+			</ul>	
+	</nav>
